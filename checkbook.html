@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .subtotal{
+            text-align: right;
+        }
+
+    </style>
+    <script>
+        class Check{
+            constructor(date, checknum, item, budget_t, cost){
+                this.date=date;
+                this.checknum=parseInt(checknum);
+                this.item=item;
+                this.budget_t=budget_t;
+                this.cost=parseFloat(cost);
+            }
+        }
+        class Checkbook{
+            constructor(){
+                this.checks=[];
+            }
+            save(check){
+                this.checks.push(check)
+            }
+            sub(){
+                let sub=0.00;
+                for (let i=0;i<this.checks.length;i++){
+                    sub+=this.checks[i].cost;
+                }
+                return sub;
+            }
+        }
+        document.addEventListener("DOMContentLoaded",function(event){
+           // console.log(event)
+            let checkBook = new Checkbook();
+
+            const newrow=`<tr>
+        <td>
+            <input type = "date" class="date">
+        </td>
+        <td>
+            <input type = "number" min = "501" class = "num">
+        </td>
+        <td>
+            <input type = "text" class = "word">
+        </td>
+        <td>
+            <input type="list" list="budgetItems" class="budget_type">
+            <datalist id="budgetItems">
+                <option value="Housing">
+                <option value="Food">
+                <option value="Clothing">
+                <option value="Utilities">
+                <option value="Transportation">
+                <option value="Entertainment">
+                <option value="Miscellaneous">
+            </datalist>
+
+        </td>
+        <td><span>$</span><input type = "number" class = "cost"><button type="button">save</button></td>
+    </tr>`
+            const rows = document.querySelector("#money")
+            const subtotalText = document.querySelector("input#subtotal")
+            rows.addEventListener("click",function (event) {
+                if ( event.target.matches("button") ) {
+                    rows.insertAdjacentHTML("beforeend", newrow)
+                    // console.log(event.target.parentNode.parentNode)
+                    const tableRow = event.target.parentNode.parentNode;
+                    const date = tableRow.querySelector("input.date").value;
+                    // console.log(date);
+                    const checkNumber = tableRow.querySelector("input.num").value;
+                    // console.log(checkNumber);
+                    const word = tableRow.querySelector("input.word").value;
+                    // console.log(word);
+                    const budget_type = tableRow.querySelector("input.budget_type").value;
+                    // console.log(budget_type);
+                    const cost = tableRow.querySelector("input.cost").value;
+                    // console.log(cost);
+                    // console.log(check.date)
+                    // console.log(check.cost)
+                    const check=new Check(date, checkNumber, word, budget_type, cost)
+                    checkBook.save(check)
+                    console.log(checkBook.sub())
+                    subtotalText.value = checkBook.sub().toFixed(2);
+
+
+
+
+
+
+                }
+            })
+
+        })
+    </script>
+
+</head>
+<body>
+<h1>Checkbook and Budget Calculator</h1>
+<button type="button">Summary</button></td>
+<table border = "1px">
+   <thead>
+    <tr>
+        <th>Date</th>
+        <th>Check#</th>
+        <th>Item</th>
+        <th>Budget type</th>
+        <th>Cost</th>
+    </tr>
+   </thead>
+    <tbody id = "money">
+    <tr>
+        <td>
+            <input type = "date" class="date">
+        </td>
+        <td>
+            <input type = "number" min = "501" class = "num">
+        </td>
+        <td>
+            <input type = "text" class = "word">
+        </td>
+        <td>
+            <input type="list" list="budgetItems" class="budget_type">
+            <datalist id="budgetItems">
+                <option value="Housing">
+                <option value="Food">
+                <option value="Clothing">
+                <option value="Utilities">
+                <option value="Transportation">
+                <option value="Entertainment">
+                <option value="Miscellaneous">
+            </datalist>
+
+        </td>
+        <td><span>$</span><input type = "number" class = "cost">
+        <button type="button">save</button></td>
+    </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4">subtotal</td>
+            <td><span>$</span><input type = "number" id="subtotal"></td>
+        </tr>
+    </tfoot>
+</table>
+
+</body>
+</html>
